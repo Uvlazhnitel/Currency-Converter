@@ -77,7 +77,7 @@ MyFrame::MyFrame(const wxString& title)
 }
 
 
-void MyFrame::OnComboBoxSelection(wxCommandEvent& event){
+void MyFrame::UpdateConversion(wxCommandEvent& event){
     int selection = comboBox->GetSelection();
 
     if(selection == 1){
@@ -88,26 +88,27 @@ void MyFrame::OnComboBoxSelection(wxCommandEvent& event){
         textCtrl1->SetValue(wxString::Format("%.2f", intValue*104.55));
     } else if (selection == 3){
         staticTextCtrl1->SetLabel("BTC:");
-        textCtrl1->SetValue(wxString::Format("%.6f", intValue/66615));
+        textCtrl1->SetValue(wxString::Format("%.6f", intValue/61,956));
     }else {
         textCtrl1->Clear();
         staticTextCtrl1->SetLabel("");
     }
 }
-
-void MyFrame::UpdateConversion(wxCommandEvent& event) {
+void MyFrame::OnComboBoxSelection(wxCommandEvent& event) {
     UpdateConversion(event);
 }
+
+
 
 void MyFrame::OnTextChanged(wxCommandEvent& event){
     wxString text = textCtrl->GetValue();
 
     if(text.ToDouble(&intValue)){
         textCtrl1->SetValue(wxString::Format("%.2f", intValue));
+        UpdateConversion(event);
     }else if(text.IsEmpty()){
         textCtrl1->Clear();
     }
 }
-
 
 
