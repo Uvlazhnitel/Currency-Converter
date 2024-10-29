@@ -46,16 +46,17 @@ bool MyApp::OnInit()
 MyFrame::MyFrame(const wxString& title)
     : wxFrame(NULL, wxID_ANY, title, wxDefaultPosition, wxSize(600, 300))
 {
-    SetBackgroundColour(wxColour(48, 164, 193));
+    SetBackgroundColour(wxColour(18, 200, 200));
+    SetTransparent(245);
     wxPanel* panel = new wxPanel(this, wxID_ANY);
 
     textCtrl = new wxTextCtrl(panel, wxID_ANY, "", wxPoint(10, 10), wxSize(150, 30));
 
     textCtrl1 = new wxTextCtrl(panel, wxID_ANY, "", wxPoint(10, 50), wxSize(150, 30), wxTE_READONLY);
 
-    staticTextCtrl = new wxStaticText(panel, wxID_ANY, "EUR:", wxPoint(40, 20), wxDefaultSize, wxALIGN_LEFT);
+    staticTextCtrl = new wxStaticText(panel, wxID_ANY, "EUR:", wxPoint(50, 20), wxDefaultSize, wxALIGN_LEFT);
 
-    staticTextCtrl1 = new wxStaticText(panel, wxID_ANY, "", wxPoint(400, 20), wxDefaultSize, wxALIGN_LEFT);
+    staticTextCtrl1 = new wxStaticText(panel, wxID_ANY, "", wxPoint(410, 20), wxDefaultSize, wxALIGN_LEFT);
 
     textCtrl->Bind(wxEVT_TEXT, &MyFrame::OnTextChanged, this);
 
