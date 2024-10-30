@@ -54,7 +54,7 @@ MyFrame::MyFrame(const wxString& title)
 
     textCtrl1 = new wxTextCtrl(panel, wxID_ANY, "", wxPoint(10, 50), wxSize(150, 30), wxTE_READONLY);
     textCtrl1->SetBackgroundColour(wxColour(144, 238, 144));
-    wxColour textColor(144, 238, 144); 
+    wxColour textColor(34, 47, 62); 
 
     textCtrl->SetForegroundColour(textColor);
     textCtrl1->SetForegroundColour(textColor);
