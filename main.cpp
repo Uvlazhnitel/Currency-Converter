@@ -20,6 +20,7 @@ private:
     wxFlexGridSizer* gridSizer; // Изменено на wxGridSizer
     wxBoxSizer* boxSizer;
     wxImage image;
+    wxButton* switchButton;
     int row;
 
     std::map<std::string,float> currencyPrice = {
@@ -102,7 +103,10 @@ MyFrame::MyFrame(const wxString& title)
 
     comboBox->SetForegroundColour(textColor); 
 
+    switchButton = new wxButton(panel, wxID_ANY, "<--->", wxPoint(260, 80));
+
     boxSizer = new wxBoxSizer(wxHORIZONTAL);
+    wxBoxSizer* boxSizerButton = new wxBoxSizer(wxVERTICAL);
     boxSizer->Add(textCtrl, 0, wxTOP | wxLEFT, 40);
     boxSizer->Add(comboBox, 0, wxALL, 30);
     boxSizer->Add(textCtrl1, 0, wxTOP , 40);
@@ -117,9 +121,9 @@ MyFrame::MyFrame(const wxString& title)
     }
 
     wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
-    mainSizer->Add(boxSizer, 0, wxALL | wxEXPAND , 10);
+    mainSizer->Add(boxSizer, 0, wxALL | wxTOP | wxLEFT | wxRIGHT  , 10);
     mainSizer->Add(gridSizer, 0, wxLEFT, 50);
-    
+
     panel->SetSizer(mainSizer);
 
     Refresh();
