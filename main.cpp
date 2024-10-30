@@ -3,6 +3,7 @@
 #include <wx/mstream.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
+#include <map>
 
 class MyFrame : public wxFrame
 {
@@ -16,7 +17,7 @@ private:
     wxComboBox* comboBox;
     wxStaticText* staticTextCtrl;
     wxStaticText* staticTextCtrl1;
-    wxGridSizer* gridSizer; // Изменено на wxGridSizer
+    wxFlexGridSizer* gridSizer; // Изменено на wxGridSizer
     wxBoxSizer* boxSizer;
     wxImage image;
 
@@ -79,20 +80,31 @@ MyFrame::MyFrame(const wxString& title)
     comboBox->SetSelection(0);
     comboBox->Bind(wxEVT_COMBOBOX, &MyFrame::OnComboBoxSelection, this);
 
+    comboBox->SetForegroundColour(textColor); 
+
     boxSizer = new wxBoxSizer(wxHORIZONTAL);
     boxSizer->Add(textCtrl, 0, wxTOP | wxLEFT, 40);
     boxSizer->Add(comboBox, 0, wxALL, 30);
     boxSizer->Add(textCtrl1, 0, wxTOP , 40);
+    int col = 1;
+    int row = 3;
 
-    gridSizer = new wxGridSizer(3, 3, 2, 2); 
-    for (int i = 1; i <= 9; ++i) {
-        wxStaticText* label = new wxStaticText(panel, wxID_ANY, wxString::Format("Text %d", i)); 
+    std::map<std::string,float> currencyPrice;
+    currencyPrice["USD"] = 1.08;
+    currencyPrice["RUB"] = 123;
+    currencyPrice["EUR"] = 134;
+    gridSizer = new wxFlexGridSizer(row,col, 5, 2); 
+    for (const auto& pair : currencyPrice) {
+        wxStaticText* label = new wxStaticText(panel, wxID_ANY, wxString::Format("%s: %g", pair.first, pair.second));
+        label->SetForegroundColour(textColor);
         gridSizer->Add(label, 0, wxALIGN_CENTER);
     }
 
+
+
     wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
-    mainSizer->Add(boxSizer, 0, wxALL | wxEXPAND, 10);
-    mainSizer->Add(gridSizer, 0, wxALL | wxEXPAND, 10);
+    mainSizer->Add(boxSizer, 0, wxALL | wxEXPAND , 10);
+    mainSizer->Add(gridSizer, 0, wxLEFT, 50);
     
     panel->SetSizer(mainSizer);
 
