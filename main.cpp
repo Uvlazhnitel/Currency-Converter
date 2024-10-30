@@ -20,6 +20,22 @@ private:
     wxFlexGridSizer* gridSizer; // Изменено на wxGridSizer
     wxBoxSizer* boxSizer;
     wxImage image;
+    int row;
+
+    std::map<std::string,float> currencyPrice = {
+        {"EUR",0.92},
+        {"RUB",97.02},
+        {"BTC",0.000014},
+        {"YUAN",7.12}
+
+    };
+
+    std::multimap<std::string,std::string> currencyBox = {
+        {"USD","EUR"},
+        {"USD","RUB"},
+        {"USD","BTC"},
+        {"USD","YUAN"},
+    };
 
     double intValue;
 
@@ -39,7 +55,7 @@ wxIMPLEMENT_APP(MyApp);
 
 bool MyApp::OnInit()
 {
-    MyFrame* frame = new MyFrame("Basic wxWidgets App");
+    MyFrame* frame = new MyFrame("Converter");
     frame->Show(true);
     return true;
 }
@@ -61,7 +77,7 @@ MyFrame::MyFrame(const wxString& title)
     textCtrl1->SetForegroundColour(textColor);
 
 
-    staticTextCtrl = new wxStaticText(panel, wxID_ANY, "EUR:", wxPoint(50, 20), wxDefaultSize, wxALIGN_LEFT);
+    staticTextCtrl = new wxStaticText(panel, wxID_ANY, "USD:", wxPoint(50, 20), wxDefaultSize, wxALIGN_LEFT);
 
     staticTextCtrl1 = new wxStaticText(panel, wxID_ANY, "", wxPoint(410, 20), wxDefaultSize, wxALIGN_LEFT);
 
@@ -71,9 +87,13 @@ MyFrame::MyFrame(const wxString& title)
     textCtrl->Bind(wxEVT_TEXT, &MyFrame::OnTextChanged, this);
 
     comboBoxItems.Add("EUR");
-    comboBoxItems.Add("EUR-USD");
-    comboBoxItems.Add("EUR-RUB");
-    comboBoxItems.Add("EUR-BTC");
+    // comboBoxItems.Add("EUR-USD");
+    // comboBoxItems.Add("EUR-RUB");
+    // comboBoxItems.Add("EUR-BTC");
+
+    for (const auto& box : currencyBox) {
+        comboBoxItems.Add(wxString::Format("%s-%s", box.first, box.second));
+    };
 
     comboBox = new wxComboBox(panel, wxID_ANY, "Select Item", wxPoint(50, 50), wxSize(150, 30), comboBoxItems, wxCB_READONLY);
 
@@ -86,21 +106,15 @@ MyFrame::MyFrame(const wxString& title)
     boxSizer->Add(textCtrl, 0, wxTOP | wxLEFT, 40);
     boxSizer->Add(comboBox, 0, wxALL, 30);
     boxSizer->Add(textCtrl1, 0, wxTOP , 40);
-    int col = 1;
-    int row = 3;
 
-    std::map<std::string,float> currencyPrice;
-    currencyPrice["USD"] = 1.08;
-    currencyPrice["RUB"] = 123;
-    currencyPrice["EUR"] = 134;
-    gridSizer = new wxFlexGridSizer(row,col, 5, 2); 
+    row = currencyPrice.size();
+
+    gridSizer = new wxFlexGridSizer(row,1, 5, 2); 
     for (const auto& pair : currencyPrice) {
         wxStaticText* label = new wxStaticText(panel, wxID_ANY, wxString::Format("%s: %g", pair.first, pair.second));
         label->SetForegroundColour(textColor);
         gridSizer->Add(label, 0, wxALIGN_CENTER);
     }
-
-
 
     wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
     mainSizer->Add(boxSizer, 0, wxALL | wxEXPAND , 10);
@@ -108,8 +122,6 @@ MyFrame::MyFrame(const wxString& title)
     
     panel->SetSizer(mainSizer);
 
-
-    
     Refresh();
 }
 
@@ -117,14 +129,17 @@ void MyFrame::UpdateConversion(wxCommandEvent& event) {
     int selection = comboBox->GetSelection();
 
     if (selection == 1) {
-        staticTextCtrl1->SetLabel("USD:");
-        textCtrl1->SetValue(wxString::Format("%.2f", intValue * 1.08));
+        staticTextCtrl1->SetLabel("EUR:");
+        textCtrl1->SetValue(wxString::Format("%.2f", intValue * currencyPrice["EUR"]));
     } else if (selection == 2) {
         staticTextCtrl1->SetLabel("RUB:");
-        textCtrl1->SetValue(wxString::Format("%.2f", intValue * 104.55));
+        textCtrl1->SetValue(wxString::Format("%.2f", intValue * currencyPrice["RUB"]));
     } else if (selection == 3) {
         staticTextCtrl1->SetLabel("BTC:");
-        textCtrl1->SetValue(wxString::Format("%.6f", intValue / 61956));
+        textCtrl1->SetValue(wxString::Format("%.6f", intValue * currencyPrice["BTC"]));
+    } else if (selection == 4) {
+        staticTextCtrl1->SetLabel("YUAN:");
+        textCtrl1->SetValue(wxString::Format("%.2f", intValue * currencyPrice["YUAN"]));
     } else {
         textCtrl1->Clear();
         staticTextCtrl1->SetLabel("");
